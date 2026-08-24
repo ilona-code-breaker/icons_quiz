@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Which Iconic TV Woman Are You?</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --accent-primary: #ec4899;
+            --accent-secondary: #8b5cf6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --option-hover: #334155;
+            --option-selected: rgba(236, 72, 153, 0.15);
+            --option-border-selected: #ec4899;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(236, 72, 153, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.12) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 760px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+            padding: 36px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .quiz-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f472b6, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .quiz-subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .progress-container {
+            margin-bottom: 28px;
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar-bg {
+            height: 8px;
+            background: var(--card-border);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 10%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 999px;
+            transition: width 0.4s ease;
+        }
+
+        .question-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: 24px;
+            color: #f1f5f9;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .option-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            user-select: none;
+        }
+
+        .option-card:hover {
+            background: var(--option-hover);
+            border-color: #475569;
+            transform: translateY(-1px);
+        }
+
+        .option-card.selected {
+            background: var(--option-selected);
+            border-color: var(--option-border-selected);
+            box-shadow: 0 0 0 1px var(--option-border-selected);
+        }
+
+        .option-indicator {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+            transition: var(--transition);
+        }
+
+        .option-card.selected .option-indicator {
+            border-color: var(--accent-primary);
+            background: var(--accent-primary);
+        }
+
+        .option-indicator::after {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .option-card.selected .option-indicator::after {
+            opacity: 1;
+        }
+
+        .option-text {
+            font-size: 0.95rem;
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+
+        .quiz-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--card-border);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--card-border);
+            color: var(--text-main);
+        }
+
+        .btn-secondary:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            box-shadow: 0 4px 14px rgba(236, 72, 153, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .result-view {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(236, 72, 153, 0.15);
+            color: var(--accent-primary);
+            border: 1px solid rgba(236, 72, 153, 0.3);
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .result-name {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 6px;
+        }
+
+        .result-show {
+            font-size: 1.1rem;
+            color: var(--accent-secondary);
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .result-quote {
+            font-style: italic;
+            background: rgba(15, 23, 42, 0.6);
+            border-left: 4px solid var(--accent-primary);
+            padding: 16px 20px;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            text-align: left;
+            margin-bottom: 28px;
+            color: #cbd5e1;
+            font-size: 1.05rem;
+        }
+
+        .result-description {
+            text-align: left;
+            line-height: 1.7;
+            color: #cbd5e1;
+            font-size: 1rem;
+            margin-bottom: 32px;
+            background: rgba(15, 23, 42, 0.4);
+            padding: 24px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--card-border);
+        }
+
+        .traits-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .trait-tag {
+            background: var(--card-border);
+            color: var(--text-main);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 24px;
+            }
+            .quiz-title {
+                font-size: 1.75rem;
+            }
+            .result-name {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="quiz-view">
+            <div class="quiz-header">
+                <h1 class="quiz-title">Which Iconic TV Woman Are You?</h1>
+                <p class="quiz-subtitle">Answer 10 situational questions to discover your ultimate television counterpart.</p>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-labels">
+                    <span id="question-count">Question 1 of 10</span>
+                    <span id="progress-percent">10%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <h2 class="question-title" id="question-text">Loading question...</h2>
+
+            <div class="options-list" id="options-container">
+                <!-- Dynamic Options -->
+            </div>
+
+            <div class="quiz-nav">
+                <button class="btn btn-secondary" id="btn-prev" disabled>← Previous</button>
+                <button class="btn btn-primary" id="btn-next" disabled>Next Question →</button>
+            </div>
+        </div>
+
+        <div class="result-view" id="result-view">
+            <div class="result-badge">Your TV Soulmate</div>
+            <h1 class="result-name" id="char-name">Character Name</h1>
+            <div class="result-show" id="char-show">Show Title</div>
+
+            <div class="result-quote" id="char-quote">"Quote goes here..."</div>
+
+            <div class="result-description">
+                <p id="char-desc">Description text goes here.</p>
+                <div class="traits-list" id="char-traits">
+                    <!-- Dynamic Trait Tags -->
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="btn-restart">↻ Retake Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "1. Your close friend calls you at 2 AM with a crisis. What is your immediate response?",
+                options: [
+                    { key: "leslie", text: "Draft a 14-page step-by-step action plan and order emergency comfort food." },
+                    { key: "samantha", text: "Show up at their door with high heels, a bottle of champagne, and zero judgment." },
+                    { key: "scully", text: "Demand the objective facts so you can analyze the situation with cold, rational logic." },
+                    { key: "buffy", text: "Grab your leather jacket and weapons—whatever is harassing them is getting beaten up tonight." },
+                    { key: "rachel", text: "Show up with coffee, make a few terrible jokes to lighten the mood, and figure it out together." },
+                    { key: "shiv", text: "Push them to make a ruthless move that turns their crisis into personal leverage." },
+                    { key: "carmela", text: "Validate their feelings, push back on their bad choices, but stand by them no matter what." },
+                    { key: "fleabag", text: "Break the fourth wall, look at an invisible camera, make a sarcastic joke, and overshare your own mess." },
+                    { key: "moira", text: "Tell them you're busy, make a bizarre excuse, and send them a dramatically unhelpful voice note." },
+                    { key: "elaine", text: "Shove them out of the way, take charge of the problem yourself, and complain about their bad dancing." }
+                ]
+            },
+            {
+                question: "2. What is your primary superpower in the workplace?",
+                options: [
+                    { key: "leslie", text: "Unlimited stamina, color-coded binders, and infectious enthusiasm." },
+                    { key: "samantha", text: "Complete self-confidence and an absolute refusal to let double standards hold you back." },
+                    { key: "scully", text: "A sharp, unshakeable mind that relies strictly on empirical evidence and facts." },
+                    { key: "buffy", text: "Martial agility, killer instincts, and a knack for saving the world on a deadline." },
+                    { key: "rachel", text: "Evolving from completely clueless to running the show while looking impeccably stylish." },
+                    { key: "shiv", text: "Masterful political maneuvering and surviving in cutthroat, male-dominated boardrooms." },
+                    { key: "carmela", text: "Keeping an entire chaotic empire running behind the scenes while holding everyone accountable." },
+                    { key: "fleabag", text: "Raw, unfiltered honesty that turns painful dynamic moments into brilliant comedy." },
+                    { key: "moira", text: "Acting so theatrical and grand that people do what you want out of sheer bewilderment." },
+                    { key: "elaine", text: "Pure aggression, zero tolerance for stupidity, and pushing past traditional norms." }
+                ]
+            },
+            {
+                question: "3. How do you handle conflict or someone opposing your goals?",
+                options: [
+                    { key: "leslie", text: "Kill them with kindness, relentless optimism, and a town hall meeting." },
+                    { key: "samantha", text: "Laugh it off, order a dirty martini, and walk away with your head held high." },
+                    { key: "scully", text: "Document every inconsistency in their argument until they dismantle themselves." },
+                    { key: "buffy", text: "Stare them down and physically throw them through a window if necessary." },
+                    { key: "rachel", text: "Panicked rambling at first, followed by surprisingly solid problem-solving." },
+                    { key: "shiv", text: "Smile to their face while quietly undermining their position behind closed doors." },
+                    { key: "carmela", text: "Give them a brutal reality check over dinner and remind them who actually keeps things afloat." },
+                    { key: "fleabag", text: "Make a witty, self-deprecating comment and immediately make the situation more awkward." },
+                    { key: "moira", text: "Feign ignorance, deliver a poetic insult, and dramatically leave the room." },
+                    { key: "elaine", text: "Push them, yell, and aggressively prove you were right all along." }
+                ]
+            },
+            {
+                question: "4. What is your ultimate idea of a perfect evening?",
+                options: [
+                    { key: "leslie", text: "Hosting a massive, meticulously planned celebration for everyone you love." },
+                    { key: "samantha", text: "A night out at an exclusive venue with great food, better cocktails, and zero romantic commitments." },
+                    { key: "scully", text: "Quiet research, a detailed autopsy report, or reading late into the night." },
+                    { key: "buffy", text: "A rare night of peace where nothing goes bump in the night and no prophecies need fulfilling." },
+                    { key: "rachel", text: "Catching up with your inner circle in your favorite comfortable spot." },
+                    { key: "shiv", text: "Attending a high-stakes gala where you can gather intelligence and make power moves." },
+                    { key: "carmela", text: "A quiet evening in your luxurious home, sipping wine while the household stays intact." },
+                    { key: "fleabag", text: "A slightly chaotic night that ends with bad decisions and great material for introspection." },
+                    { key: "moira", text: "Sipping rare wine in a lavish silk robe while listening to classical music or your own voice." },
+                    { key: "elaine", text: "Ordering takeout, arguing about petty things, and dancing badly in the living room." }
+                ]
+            },
+            {
+                question: "5. What is your defining personal motto?",
+                options: [
+                    { key: "leslie", text: "No one can stop a person with a binder and a dream." },
+                    { key: "samantha", text: "I am beautiful, powerful, and accountable only to myself." },
+                    { key: "scully", text: "The truth is out there, but logic will get us there first." },
+                    { key: "buffy", text: "Into every generation, a slayer is born—so let's get to work." },
+                    { key: "rachel", text: "I may have started out clueless, but I built this life myself." },
+                    { key: "shiv", text: "Never let them see you lose—power is taken, not given." },
+                    { key: "carmela", text: "Someone has to be the adult in the room." },
+                    { key: "fleabag", text: "If you don't laugh at the mess, you'll cry about it." },
+                    { key: "moira", text: "Life is a stage, and I am the undisputed leading lady." },
+                    { key: "elaine", text: "I say what everyone else is too afraid to think." }
+                ]
+            },
+            {
+                question: "6. How do you kick off your morning routine?",
+                options: [
+                    { key: "leslie", text: "Double-shot espresso, reviewing today's 50 task checklists before 6:00 AM." },
+                    { key: "samantha", text: "Fresh juice, a flawless skincare routine, and checking text messages from last night." },
+                    { key: "scully", text: "Black coffee, reviewing crime lab reports, and heading straight into work early." },
+                    { key: "buffy", text: "Hitting snooze three times, grabbing a donut on the run, and complaining about lack of sleep." },
+                    { key: "rachel", text: "Picking out the perfect outfit, pouring a huge latte, and gossiping with roomies." },
+                    { key: "shiv", text: "Skimming national news on a private car ride while orchestrating political moves." },
+                    { key: "carmela", text: "Cooking a massive hot breakfast for the family while keeping an eye on household chaos." },
+                    { key: "fleabag", text: "Staring blankly at the ceiling, questioning life choices, and running late." },
+                    { key: "moira", text: "Selecting one of 50 custom wigs and demanding breakfast served in bed." },
+                    { key: "elaine", text: "Rushing out the door frustrated, yelling at traffic, and grabbing a muffin on the subway." }
+                ]
+            },
+            {
+                question: "7. How would your friends describe your signature fashion style?",
+                options: [
+                    { key: "leslie", text: "Tailored suit jackets, festive colorful pins, and practical sensible shoes." },
+                    { key: "samantha", text: "Power suits, plunging necklines, bold designer heels, and vibrant primary colors." },
+                    { key: "scully", text: "Classic dark trench coats, tailored neutral suits, and functional FBI badges." },
+                    { key: "buffy", text: "Leather jackets, trendy 2000s mini skirts, knee-high boots, and stake holsters." },
+                    { key: "rachel", text: "Iconic high-fashion trends, layered hair, designer skirts, and effortless chic." },
+                    { key: "shiv", text: "Monochromatic high-waisted trousers, sleek silk blouses, and expensive neutral minimalism." },
+                    { key: "carmela", text: "Statement gold jewelry, manicured nails, French designer prints, and luxury fur." },
+                    { key: "fleabag", text: "Classic black jumpsuit, red lipstick, striped tops, and casual effortless edge." },
+                    { key: "moira", text: "Avant-garde black-and-white couture, dramatic statement neckpieces, and eccentric wigs." },
+                    { key: "elaine", text: "Floral midi dresses, oversized blazers, ankle boots, and voluminous hair." }
+                ]
+            },
+            {
+                question: "8. What is your fundamental relationship with money?",
+                options: [
+                    { key: "leslie", text: "I track every penny in budget spreadsheets and use it strictly to fund public projects." },
+                    { key: "samantha", text: "I earn my own fortune, spend it on absolute luxury, and never justify my purchases." },
+                    { key: "scully", text: "I earn a modest government salary and care far more about truth than wealth." },
+                    { key: "buffy", text: "Money comes and goes; I'm too busy saving lives to build a savings account." },
+                    { key: "rachel", text: "I cut up my parents' credit cards and earned my financial independence from scratch!" },
+                    { key: "shiv", text: "Money is power, leverage, and inheritance—it's how you control the room." },
+                    { key: "carmela", text: "I manage the household assets carefully, but I expect safety, stability, and fine things." },
+                    { key: "fleabag", text: "I run a struggling niche cafe, overdraft my account, and pretend everything is fine." },
+                    { key: "moira", text: "I was born for extreme luxury and consider financial ruin a mere temporary tragedy." },
+                    { key: "elaine", text: "I work hard for my paycheck and get absurdly petty over small financial disputes." }
+                ]
+            },
+            {
+                question: "9. How do you handle dating and romantic relationships?",
+                options: [
+                    { key: "leslie", text: "I make elaborate scrapbooks and love letters for the person who shares my values." },
+                    { key: "samantha", text: "Fun, passionate, non-committal, and on my terms—romance without strings." },
+                    { key: "scully", text: "Extremely guarded; I need profound intellectual trust before opening up." },
+                    { key: "buffy", text: "Complicated, dramatic, and usually involving brooding antiheroes with dark secrets." },
+                    { key: "rachel", text: "Will-they-won't-they drama, romantic grand gestures, and finding true connection." },
+                    { key: "shiv", text: "Strategic partnerships where I maintain control and never show vulnerability first." },
+                    { key: "carmela", text: "Deep commitment, shared family ties, and weathering intense marital storms." },
+                    { key: "fleabag", text: "Falling for entirely inappropriate people and using humor to avoid real vulnerability." },
+                    { key: "moira", text: "Devoted partner to someone who appreciates my artistic brilliance and drama." },
+                    { key: "elaine", text: "Very picky, ending relationships over absurd minor red flags and quirks." }
+                ]
+            },
+            {
+                question: "10. At the end of the day, what is your ultimate life goal?",
+                options: [
+                    { key: "leslie", text: "To make my community better and leave a legacy of public service." },
+                    { key: "samantha", text: "To live fully, remain unapologetically authentic, and enjoy every luxury." },
+                    { key: "scully", text: "To uncover truth through science, facts, and uncompromising integrity." },
+                    { key: "buffy", text: "To protect the people I love and rewrite the rules of destiny." },
+                    { key: "rachel", text: "To build a career I love, stay true to my crew, and evolve constantly." },
+                    { key: "shiv", text: "To reach the top of the food chain and prove nobody can manipulate me." },
+                    { key: "carmela", text: "To protect my home, safeguard my family, and secure long-term peace." },
+                    { key: "fleabag", text: "To learn how to heal, love genuinely, and forgive myself for past mistakes." },
+                    { key: "moira", text: "To remain an icon, nurture my family, and achieve timeless artistic greatness." },
+                    { key: "elaine", text: "To live life on my own terms without compromising for anybody's expectations." }
+                ]
+            }
+        ];
+
+        const characterProfiles = {
+            leslie: {
+                name: "Leslie Knope",
+                show: "Parks and Recreation",
+                quote: "We need to remember what's important in life: friends, waffles, work. Or waffles, friends, work. Doesn't matter, but work is third.",
+                desc: "You are an unstoppable force of nature! Unmatched in your optimism, dedication, and affection for those around you, you bring color-coded organization and boundless energy to everything you tackle.",
+                traits: ["Hyper-Organized", "Endlessly Loyal", "Passionate", "Relentless Leader"]
+            },
+            samantha: {
+                name: "Samantha Jones",
+                show: "Sex and the City",
+                quote: "I love you, but I love me more.",
+                desc: "Unapologetic, fiercely confident, and completely unbothered by small minds, you lead with absolute self-assurance. You are the ultimate ride-or-die friend who offers zero judgment.",
+                traits: ["Unapologetic", "Fiercely Loyal", "Confident", "Independent"]
+            },
+            scully: {
+                name: "Dana Scully",
+                show: "The X-Files",
+                quote: "Nothing happens upon a whim. It's all part of a series of events that started long ago.",
+                desc: "You are the anchor of reason and intelligence in a chaotic world. Cool under pressure, analytical, and uncompromising in your pursuit of truth, people rely on you to bring logic to every dilemma.",
+                traits: ["Analytical Genius", "Grounded Skeptic", "Unshakeable", "Composed"]
+            },
+            buffy: {
+                name: "Buffy Summers",
+                show: "Buffy the Vampire Slayer",
+                quote: "The hardest thing in this world is to live in it. Be brave. Live.",
+                desc: "You combine strength with heart like no one else. Though you often end up carrying heavy responsibilities, you face adversity head-on with quick wit and martial resilience.",
+                traits: ["Badass Warrior", "Reluctant Leader", "Resilient", "Heart of Gold"]
+            },
+            rachel: {
+                name: "Rachel Green",
+                show: "Friends",
+                quote: "It's like a napkin... it's just something you use once and then throw away.",
+                desc: "You are proof that personal growth and fabulous style go hand in hand! Adaptable, charming, and resilient, you have the ability to reinvent yourself and turn everyday chaos into success.",
+                traits: ["Adaptable", "Stylish", "Self-Made", "Charming"]
+            },
+            shiv: {
+                name: "Shiv Roy",
+                show: "Succession",
+                quote: "You come for the king, you best not miss... or whatever.",
+                desc: "Strategic, sharp-tongued, and perceptive, you know how to navigate high-stakes environments with precision. You keep your cards close to your chest and command respect wherever you walk.",
+                traits: ["Strategic Thinker", "Sharp-Tongued", "Ambitious", "Power Player"]
+            },
+            carmela: {
+                name: "Carmela Soprano",
+                show: "The Sopranos",
+                quote: "You bring down a house that's built on a rock, you're gonna get hurt.",
+                desc: "You are the pragmatic backbone of your social realm. Protective, sharp, and commanding, you hold down the fort through thick and thin as the ultimate voice of truth and stability.",
+                traits: ["Pragmatic Anchor", "Fiercely Protective", "Commanding", "Steadfast"]
+            },
+            fleabag: {
+                name: "Fleabag",
+                show: "Fleabag",
+                quote: "Either I perform as a loving daughter or I don't go. Which one makes me look worse?",
+                desc: "Hilariously honest, deeply observant, and charmingly chaotic, you possess a razor-sharp humor that masks genuine vulnerability. You see through pretense instantly.",
+                traits: ["Witty", "Unfiltered", "Observational", "Charmingly Chaotic"]
+            },
+            moira: {
+                name: "Moira Rose",
+                show: "Schitt's Creek",
+                quote: "Bébé, you must learn to stand on your own two feet, preferably in designer heels.",
+                desc: "Unapologetically dramatic and iconically unique, you bring theatrical flair and grand energy wherever you wander. Life is a grand stage, and you make sure every scene is unforgettable.",
+                traits: ["Theatrical", "Iconic", "Dramatic Flair", "Unforgettable"]
+            },
+            elaine: {
+                name: "Elaine Benes",
+                show: "Seinfeld",
+                quote: "I can't run with a guy who can't take a hint!",
+                desc: "Bold, assertive, and totally free of double standards, you say what everyone else is secretly thinking. You have zero patience for foolishness and tackle life's absurdities head-on.",
+                traits: ["Bold & Assertive", "Unfiltered", "Direct", "Zero Nonsense"]
+            }
+        };
+
+        let currentQuestion = 0;
+        let selectedAnswers = Array(quizData.length).fill(null);
+
+        const quizView = document.getElementById('quiz-view');
+        const resultView = document.getElementById('result-view');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const questionCount = document.getElementById('question-count');
+        const progressPercent = document.getElementById('progress-percent');
+        const progressFill = document.getElementById('progress-fill');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const btnRestart = document.getElementById('btn-restart');
+
+        function loadQuestion(index) {
+            const data = quizData[index];
+            questionText.textContent = data.question;
+            
+            const progress = ((index + 1) / quizData.length) * 100;
+            questionCount.textContent = `Question ${index + 1} of ${quizData.length}`;
+            progressPercent.textContent = `${Math.round(progress)}%`;
+            progressFill.style.width = `${progress}%`;
+
+            optionsContainer.innerHTML = '';
+            data.options.forEach((opt) => {
+                const isSelected = selectedAnswers[index] === opt.key;
+                const card = document.createElement('div');
+                card.className = `option-card ${isSelected ? 'selected' : ''}`;
+                card.innerHTML = `
+                    <div class="option-indicator"></div>
+                    <div class="option-text">${opt.text}</div>
+                `;
+                card.addEventListener('click', () => selectOption(opt.key));
+                optionsContainer.appendChild(card);
+            });
+
+            btnPrev.disabled = index === 0;
+            btnNext.disabled = selectedAnswers[index] === null;
+            btnNext.textContent = index === quizData.length - 1 ? 'See Results ★' : 'Next Question →';
+        }
+
+        function selectOption(key) {
+            selectedAnswers[currentQuestion] = key;
+            loadQuestion(currentQuestion);
+        }
+
+        btnPrev.addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion(currentQuestion);
+            }
+        });
+
+        btnNext.addEventListener('click', () => {
+            if (currentQuestion < quizData.length - 1) {
+                currentQuestion++;
+                loadQuestion(currentQuestion);
+            } else {
+                showResults();
+            }
+        });
+
+        function showResults() {
+            const counts = {};
+            selectedAnswers.forEach(key => {
+                if (key) counts[key] = (counts[key] || 0) + 1;
+            });
+
+            let winnerKey = "leslie";
+            let maxCount = 0;
+            for (const [key, count] of Object.entries(counts)) {
+                if (count > maxCount) {
+                    maxCount = count;
+                    winnerKey = key;
+                }
+            }
+
+            const profile = characterProfiles[winnerKey];
+
+            document.getElementById('char-name').textContent = profile.name;
+            document.getElementById('char-show').textContent = profile.show;
+            document.getElementById('char-quote').textContent = `"${profile.quote}"`;
+            document.getElementById('char-desc').textContent = profile.desc;
+
+            const traitsContainer = document.getElementById('char-traits');
+            traitsContainer.innerHTML = '';
+            profile.traits.forEach(trait => {
+                const tag = document.createElement('span');
+                tag.className = 'trait-tag';
+                tag.textContent = trait;
+                traitsContainer.appendChild(tag);
+            });
+
+            quizView.style.display = 'none';
+            resultView.style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        btnRestart.addEventListener('click', () => {
+            currentQuestion = 0;
+            selectedAnswers = Array(quizData.length).fill(null);
+            resultView.style.display = 'none';
+            quizView.style.display = 'block';
+            loadQuestion(0);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        loadQuestion(0);
+    </script>
+</body>
+</html>
